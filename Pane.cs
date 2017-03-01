@@ -7,21 +7,16 @@ using System.Threading.Tasks;
 namespace mc
 {
     class Pane : UIElement
-    {
-        private int X;
-        private int Y;
-        private int Width;
-        private int Height;
+    {       
         private TextList FileList;
         private TextBox CurrentLocation;
 
-        public Pane(int PosX, int PosY, int PaneWidth, int PaneHeight)
+        public Pane(int PosX, int PosY, int PaneWidth, int PaneHeight) : base(PosX, PosY, PaneWidth, PaneHeight)
         {
-            X = PosX;
-            Y = PosY;
-            Width = PaneWidth;
-            Height = PaneHeight;
             DrawBorder();
+
+            CurrentLocation = new TextBox(base.X, base.Y + PaneHeight - 1, PaneWidth, 1);
+            CurrentLocation.DrawBorder(true, false, false, false);
         }
     }
 }

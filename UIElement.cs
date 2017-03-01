@@ -8,12 +8,20 @@ namespace mc
 {
     class UIElement
     {
-        private int X;
-        private int Y;
-        private int Width;
-        private int Height;
+        protected int X;
+        protected int Y;
+        protected int Width;
+        protected int Height;
 
-        public void DrawBorder()
+        public UIElement(int PosX, int PosY, int ElementWidth, int ElementHeight)
+        {
+            X = PosX;
+            Y = PosY;
+            Width = ElementWidth + 1;
+            Height = ElementHeight + 1;
+        }
+
+        public virtual void DrawBorder()
         {
             Console.SetCursorPosition(X, Y);
 
@@ -32,6 +40,9 @@ namespace mc
             {
                 Console.SetCursorPosition(X, k);
                 System.Console.Write('\u2502');
+
+                Console.SetCursorPosition(X + 1, k);
+                System.Console.Write('A');
 
                 Console.SetCursorPosition(X + Width, k);
                 System.Console.Write('\u2502');

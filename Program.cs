@@ -13,6 +13,8 @@ namespace mc
         {
             Console.OutputEncoding = System.Text.Encoding.Unicode;
             Pane p = new Pane(0, 0, 10, 10);
+            //TextBox t = new TextBox(0, 0, 10, 1);
+            Console.ReadKey();
         }
     }
 
