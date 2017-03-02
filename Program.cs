@@ -12,8 +12,12 @@ namespace mc
         static void Main(string[] args)
         {
             Console.OutputEncoding = System.Text.Encoding.Unicode;
-            Pane p = new Pane(0, 0, 10, 10);
-            //TextBox t = new TextBox(0, 0, 10, 1);
+            Pane LeftPane = new Pane(0, 0, 39, 29);
+            Pane RightPane = new Pane(40, 0, 39, 29);
+            RightPane.SetCurrentLocation(Environment.GetEnvironmentVariable("HOME"));
+            LeftPane.SetCurrentLocation(Environment.GetEnvironmentVariable("PSModulePath"));
+            LeftPane.DrawContents();
+            RightPane.DrawContents();
             Console.ReadKey();
         }
     }

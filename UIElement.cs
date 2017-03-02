@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace mc
 {
-    class UIElement
+    abstract class UIElement
     {
         protected int X;
         protected int Y;
@@ -17,8 +17,8 @@ namespace mc
         {
             X = PosX;
             Y = PosY;
-            Width = ElementWidth + 1;
-            Height = ElementHeight + 1;
+            Width = ElementWidth;
+            Height = ElementHeight;
         }
 
         public virtual void DrawBorder()
@@ -26,23 +26,26 @@ namespace mc
             Console.SetCursorPosition(X, Y);
 
             //Draw the outline top and bottom
-            for (int k = X; k < Width; k++)
+            for (int k = X; k < (Width + X); k++)
             {
                 Console.SetCursorPosition(k, Y);
                 System.Console.Write('\u2500');
+
+                //Console.SetCursorPosition(k, Y + 1);
+                //System.Console.Write('A');
 
                 Console.SetCursorPosition(k, Y + Height);
                 System.Console.Write('\u2500');
             }
 
             //Draw the outline left and right
-            for (int k = Y; k < Height; k++)
+            for (int k = Y; k < (Height + Y); k++)
             {
                 Console.SetCursorPosition(X, k);
                 System.Console.Write('\u2502');
 
-                Console.SetCursorPosition(X + 1, k);
-                System.Console.Write('A');
+                //Console.SetCursorPosition(X + 1, k);
+                //System.Console.Write('A');
 
                 Console.SetCursorPosition(X + Width, k);
                 System.Console.Write('\u2502');
@@ -62,5 +65,7 @@ namespace mc
             Console.SetCursorPosition(X, Y + Height);
             System.Console.Write('\u2514');
         }
+
+        public abstract void DrawContents();
     }
 }

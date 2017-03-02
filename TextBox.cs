@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace mc
 {
-    class TextBox : UIElement
+    class TextBox : UIElement, INotifyPropertyChanged
     {
         class BorderCorner
         {
@@ -18,9 +19,30 @@ namespace mc
             public char UnicodeChar;
         }
 
+        private string text;
+
+        public string Text
+        {
+            get { return text; }
+            set
+            {
+                text = value;
+                OnPropertyChanged("Text");
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public TextBox(int PosX, int PosY, int TextBoxWidth, int TextBoxHeight) : base(PosX, PosY, TextBoxWidth, TextBoxHeight)
         {
             DrawBorder();
+            Text = string.Empty;
+        }
+
+        protected void OnPropertyChanged(string PropertyName)
+        {
+            int a = 7;
+            int b = a++;
         }
 
         public void DrawBorder(bool ExtendUp, bool ExtendDown, bool ExtendLeft, bool ExtendRight)
@@ -28,7 +50,7 @@ namespace mc
             Console.SetCursorPosition(X, Y);
 
             //Draw the outline top and bottom
-            for (int k = X; k < Width; k++)
+            for (int k = X; k < (Width + X); k++)
             {
                 Console.SetCursorPosition(k, Y);
                 System.Console.Write('\u2500');
@@ -38,7 +60,7 @@ namespace mc
             }
 
             //Draw the outline left and right
-            for (int k = Y; k < Height; k++)
+            for (int k = Y; k < (Height + Y); k++)
             {
                 Console.SetCursorPosition(X, k);
                 System.Console.Write('\u2502');
@@ -132,6 +154,25 @@ namespace mc
             //Bottom left
             Console.SetCursorPosition(X, Y + Height);
             System.Console.Write(BottomLeft.UnicodeChar);
+        }
+
+        public override void DrawContents()
+        {
+            Console.SetCursorPosition(X + 1, Y + 1);
+            if (Text.Length < Width)
+            {
+                Console.Write(Text);
+            } else
+            {
+                int CurrentPosition = 0;
+                int CurrentRow = 0;
+
+                do
+                {
+                    Console.Write(Text.Substring(CurrentPosition, (Width - 1)));
+                    CurrentPosition += Width - 1;
+                } while (++CurrentRow < (Height - 1));
+            } 
         }
     }
 }
