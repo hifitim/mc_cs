@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace mc
 {
@@ -31,9 +27,6 @@ namespace mc
                 Console.SetCursorPosition(k, Y);
                 System.Console.Write('\u2500');
 
-                //Console.SetCursorPosition(k, Y + 1);
-                //System.Console.Write('A');
-
                 Console.SetCursorPosition(k, Y + Height);
                 System.Console.Write('\u2500');
             }
@@ -43,9 +36,6 @@ namespace mc
             {
                 Console.SetCursorPosition(X, k);
                 System.Console.Write('\u2502');
-
-                //Console.SetCursorPosition(X + 1, k);
-                //System.Console.Write('A');
 
                 Console.SetCursorPosition(X + Width, k);
                 System.Console.Write('\u2502');

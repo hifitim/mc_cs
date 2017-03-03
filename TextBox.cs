@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace mc
 {
@@ -113,15 +109,15 @@ namespace mc
                 BottomRight.East = true;
             }
 
-            /** 
+            /**
              * \u251C - ├
-             * 
+             *
              * \u252C - ┬
-             * 
+             *
              * \u2524 - ┤
-             * 
+             *
              * \u2434 - ┴
-             * 
+             *
              * \u253C - ┼
              **/
 
@@ -172,7 +168,7 @@ namespace mc
                     Console.Write(Text.Substring(CurrentPosition, (Width - 1)));
                     CurrentPosition += Width - 1;
                 } while (++CurrentRow < (Height - 1));
-            } 
+            }
         }
     }
 }
