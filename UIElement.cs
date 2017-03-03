@@ -60,5 +60,10 @@ namespace mc
         public abstract void MoveCursorToEnd();
         public abstract void MoveCursorToBegin();
         public abstract void MoveCursorToPreferred();
+        public abstract void MoveCursorUp();
+        public abstract void MoveCursorDown();
+        public abstract void MoveCursorLeft();
+        public abstract void MoveCursorRight();
+
     }
 }

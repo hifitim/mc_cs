@@ -184,5 +184,39 @@ namespace mc
         }
         public override void MoveCursorToBegin() { }
         public override void MoveCursorToPreferred() { MoveCursorToEnd(); }
+        public override void MoveCursorUp()
+        {
+            int CurrentY = Console.CursorTop;
+            if (Height > 2 && ((CurrentY - Y) > 0))
+            {
+                Console.CursorTop -= 1;
+            }
+        }
+        public override void MoveCursorDown()
+        {
+            int CurrentY = Console.CursorTop;
+            if (Height > 2 && ((CurrentY - Y) < Height))
+            {
+                Console.CursorTop += 1;
+            }
+        }
+        public override void MoveCursorLeft()
+        {
+            int CurrentX = Console.CursorLeft;
+            if (CurrentX > 0 && ((CurrentX - X) > 0))
+            {
+                Console.CursorLeft -= 1;
+            }
+        }
+        public override void MoveCursorRight()
+        {
+            int CurrentX = Console.CursorLeft;
+            // + 1 so that you can type at the end of the string
+            if ((CurrentX < (Text.Length + X + 1)) &&
+                (CurrentX < (Width + X)))
+            {
+                Console.CursorLeft += 1;
+            }
+        }
     }
 }

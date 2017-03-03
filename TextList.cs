@@ -48,6 +48,10 @@ namespace mc
             Console.SetCursorPosition(X + 1, Y + 1);
         }
         public override void MoveCursorToPreferred() { MoveCursorToBegin(); }
+        public override void MoveCursorUp() { }
+        public override void MoveCursorDown() { }
+        public override void MoveCursorLeft() { }
+        public override void MoveCursorRight() { }
 
     }
 }

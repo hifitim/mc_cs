@@ -32,7 +32,7 @@ namespace mc
             BuildUI();
 
             List<UIElement> UIElements = new List<UIElement>();
-            int CurrentUIElement = 0;
+            int FocusedUIElement = 0;
 
             UIElements.Add(LeftFileList);
             UIElements.Add(RightFileList);
@@ -54,23 +54,35 @@ namespace mc
                     case ConsoleKey.Tab:
                         if ((ReadKey.Modifiers & ConsoleModifiers.Shift) == 0)
                         {
-                            if (++CurrentUIElement > (UIElements.Count - 1))
+                            if (++FocusedUIElement > (UIElements.Count - 1))
                             {
-                                CurrentUIElement = 0;
+                                FocusedUIElement = 0;
                             }
                         }
                         else
                         {
-                            if (--CurrentUIElement < 0)
+                            if (--FocusedUIElement < 0)
                             {
-                                CurrentUIElement = UIElements.Count - 1;
+                                FocusedUIElement = UIElements.Count - 1;
                             }
                         }
 
-                        UIElements[CurrentUIElement].MoveCursorToPreferred();
+                        UIElements[FocusedUIElement].MoveCursorToPreferred();
 
                         break;
+                    case ConsoleKey.LeftArrow:
+                        UIElements[FocusedUIElement].MoveCursorLeft();
+                        break;
+                    case ConsoleKey.RightArrow:
+                        UIElements[FocusedUIElement].MoveCursorRight();
+                        break;
                     default:
+                        // Printable key
+                        if(ReadKey.KeyChar >= 0x20 &&
+                            ReadKey.KeyChar <= 0x7F)
+                        {
+
+                        }
                         break;
                 }
 

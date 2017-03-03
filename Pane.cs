@@ -1,4 +1,6 @@
-﻿namespace mc
+﻿using System;
+
+namespace mc
 {
     class Pane : UIElement
     {
@@ -13,5 +15,9 @@
         public override void MoveCursorToEnd() { }
         public override void MoveCursorToBegin() { }
         public override void MoveCursorToPreferred() { }
+        public override void MoveCursorUp() { }
+        public override void MoveCursorDown() { }
+        public override void MoveCursorLeft() { }
+        public override void MoveCursorRight() { }
     }
 }
