@@ -9,8 +9,9 @@
             DrawBorder();
         }
 
-        public override void DrawContents()
-        {
-        }
+        public override void DrawContents() { }
+        public override void MoveCursorToEnd() { }
+        public override void MoveCursorToBegin() { }
+        public override void MoveCursorToPreferred() { }
     }
 }

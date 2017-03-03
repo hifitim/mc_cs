@@ -4,10 +4,10 @@ namespace mc
 {
     abstract class UIElement
     {
-        protected int X;
-        protected int Y;
-        protected int Width;
-        protected int Height;
+        public int X { get; }
+        public int Y { get; }
+        public int Width { get; }
+        public int Height { get; }
 
         public UIElement(int PosX, int PosY, int ElementWidth, int ElementHeight)
         {
@@ -57,5 +57,8 @@ namespace mc
         }
 
         public abstract void DrawContents();
+        public abstract void MoveCursorToEnd();
+        public abstract void MoveCursorToBegin();
+        public abstract void MoveCursorToPreferred();
     }
 }

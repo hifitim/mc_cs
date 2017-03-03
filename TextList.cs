@@ -42,5 +42,12 @@ namespace mc
                 }
             }
         }
+        public override void MoveCursorToEnd() { }
+        public override void MoveCursorToBegin()
+        {
+            Console.SetCursorPosition(X + 1, Y + 1);
+        }
+        public override void MoveCursorToPreferred() { MoveCursorToBegin(); }
+
     }
 }

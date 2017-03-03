@@ -9,13 +9,13 @@ namespace mc
         const int CurrentLocationHeight = 2;
         const int LeftPanePosX = 0;
         const int LeftPanePosY = 0;
-        const int LeftPaneWidth = 39;
-        const int LeftPaneHeight = 29;
+        static int LeftPaneWidth = (Console.WindowWidth / 2) - 1;
+        static int LeftPaneHeight = Console.WindowHeight - 1;
 
-        const int RightPanePosX = 40;
+        static int RightPanePosX = (Console.WindowWidth / 2);
         const int RightPanePosY = 0;
-        const int RightPaneWidth = 39;
-        const int RightPaneHeight = 29;
+        static int RightPaneWidth = (Console.WindowWidth / 2) - 1;
+        static int RightPaneHeight = Console.WindowHeight - 1;
 
         static Pane LeftPane;
         static TextList LeftFileList;
@@ -32,33 +32,52 @@ namespace mc
             BuildUI();
 
             List<UIElement> UIElements = new List<UIElement>();
-            UIElements.Add(LeftPane);
-            UIElements.Add(RightPane);
+            int CurrentUIElement = 0;
+
+            UIElements.Add(LeftFileList);
+            UIElements.Add(RightFileList);
+
+            UIElements.Add(LeftCurrentLocation);
+            UIElements.Add(RightCurrentLocation);
 
             LeftPane.DrawContents();
             RightPane.DrawContents();
 
+            Console.SetCursorPosition(UIElements[0].X + 1, UIElements[0].Y + 1);
+
             ConsoleKeyInfo ReadKey;
             do
             {
-                ReadKey = Console.ReadKey();
+                ReadKey = Console.ReadKey(true);
                 switch (ReadKey.Key)
                 {
                     case ConsoleKey.Tab:
-                        if ((ReadKey.Modifiers & ConsoleModifiers.Shift) != 0)
+                        if ((ReadKey.Modifiers & ConsoleModifiers.Shift) == 0)
                         {
-
+                            if (++CurrentUIElement > (UIElements.Count - 1))
+                            {
+                                CurrentUIElement = 0;
+                            }
                         }
                         else
                         {
-
+                            if (--CurrentUIElement < 0)
+                            {
+                                CurrentUIElement = UIElements.Count - 1;
+                            }
                         }
+
+                        UIElements[CurrentUIElement].MoveCursorToPreferred();
+
                         break;
                     default:
                         break;
                 }
 
             } while (ReadKey.Key != ConsoleKey.Escape);
+            Console.WriteLine();
+            Console.Clear();
+            Console.WriteLine();
         }
 
         private static void BuildUI()
@@ -80,7 +99,7 @@ namespace mc
             LeftFileList = new TextList(LeftPanePosX + 1,
                                         LeftPanePosY + 1,
                                         LeftPaneWidth - 1,
-                                        LeftPaneHeight - 2,
+                                        LeftPaneHeight - 5,
                                         new List<string>(Directory.GetFiles(HomeDirectory)));
 
             LeftCurrentLocation = new TextBox(LeftPanePosX,
@@ -91,20 +110,24 @@ namespace mc
             RightFileList = new TextList(RightPanePosX + 1,
                                          RightPanePosY + 1,
                                          RightPaneWidth - 1,
-                                         RightPaneHeight - 2,
+                                         RightPaneHeight - 5,
                                          new List<string>(Directory.GetFiles(HomeDirectory)));
 
             RightCurrentLocation = new TextBox(RightPanePosX,
                                                RightPanePosY + RightPaneHeight - CurrentLocationHeight,
                                                RightPaneWidth,
                                                CurrentLocationHeight);
-            LeftFileList.DrawContents();
             LeftCurrentLocation.DrawBorder(true, false, false, false);
             LeftCurrentLocation.Text = HomeDirectory;
 
-            RightFileList.DrawContents();
             RightCurrentLocation.DrawBorder(true, false, false, false);
             RightCurrentLocation.Text = HomeDirectory;
+
+            RightFileList.DrawContents();
+            LeftFileList.DrawContents();
+
+            RightCurrentLocation.DrawContents();
+            LeftCurrentLocation.DrawContents();
         }
     }
 

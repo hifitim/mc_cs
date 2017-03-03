@@ -91,19 +91,19 @@ namespace mc
                 TopRight.North = true;
             }
 
-            if(ExtendDown)
+            if (ExtendDown)
             {
                 BottomRight.South = true;
                 BottomLeft.South = true;
             }
 
-            if(ExtendLeft)
+            if (ExtendLeft)
             {
                 TopLeft.West = true;
                 BottomLeft.West = true;
             }
 
-            if(ExtendRight)
+            if (ExtendRight)
             {
                 TopRight.East = true;
                 BottomRight.East = true;
@@ -158,7 +158,8 @@ namespace mc
             if (Text.Length < Width)
             {
                 Console.Write(Text);
-            } else
+            }
+            else
             {
                 int CurrentPosition = 0;
                 int CurrentRow = 0;
@@ -170,5 +171,18 @@ namespace mc
                 } while (++CurrentRow < (Height - 1));
             }
         }
+
+        public override void MoveCursorToEnd()
+        {
+            if (Text.Length > (Width - 1))
+            {
+                Console.SetCursorPosition(X + Width - 1, Y + 1);
+            } else
+            {
+                Console.SetCursorPosition(X + Text.Length, Y + 1);
+            }
+        }
+        public override void MoveCursorToBegin() { }
+        public override void MoveCursorToPreferred() { MoveCursorToEnd(); }
     }
 }
