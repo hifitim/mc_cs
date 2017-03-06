@@ -261,6 +261,8 @@ namespace mc
         {
             Console.SetCursorPosition(X + 1, Y + 1);
             int NewBeginCharLocation = CurrentCursorPosition + CharsToScroll - Width + 2;
+            if (NewBeginCharLocation < 0)
+                return;
             if ((Width + NewBeginCharLocation - 2) < Text.Length)
             {
                 Console.Write(Text.Substring(NewBeginCharLocation, Width - 1));
@@ -270,6 +272,7 @@ namespace mc
         private void ScrollLeft(int CharsToScroll)
         {
             Console.SetCursorPosition(X + 1, Y + 1);
+            CurrentCursorPosition = X + 1;
             int NewBeginCharLocation = CurrentCursorPosition - 1;
             if (NewBeginCharLocation >= 0)
             {
@@ -282,6 +285,17 @@ namespace mc
             if (ReadKey.Key == ConsoleKey.Enter && OnReturnKeyPressed != null)
             {
                 OnReturnKeyPressed(this, new TextBoxReturnKeyEventArgs(Text));
+            } else if(ReadKey.Key == ConsoleKey.End)
+            {
+                CurrentCursorPosition = Text.Length - (Text.Length % Width);
+                ScrollRight(Text.Length - Width - 1);
+                Console.SetCursorPosition(X + Width, Y + 1);
+                CurrentCursorPosition = Text.Length;
+            } else if(ReadKey.Key == ConsoleKey.Home)
+            {
+                ScrollLeft(CurrentCursorPosition);
+                Console.SetCursorPosition(X + 1, Y + 1);
+                CurrentCursorPosition = 0;
             }
         }
         public override void PrintableKeyPressed(ConsoleKeyInfo ReadKey)
