@@ -171,7 +171,6 @@ namespace mc
                     Console.Write(Text.Substring(CurrentPosition, (Width - 1)));
                     CurrentPosition += Width - 1;
                 } while (++CurrentRow < (Height - 1));
-                CurrentCursorPosition = Width;
             }
         }
 
@@ -189,7 +188,7 @@ namespace mc
         public override void MoveCursorToBegin()
         {
             Console.SetCursorPosition(X + 1, Y + 1);
-            ScrollLeft(CurrentCursorPosition - X);
+            //ScrollLeft(CurrentCursorPosition - X);
             CurrentCursorPosition = 0;
         }
         public override void MoveCursorToPreferred() { MoveCursorToBegin(); }
@@ -199,6 +198,7 @@ namespace mc
             if (Height > 2 && ((CurrentY - Y) > 0))
             {
                 Console.CursorTop -= 1;
+               CurrentCursorPosition -= Width - 2;
             }
         }
         public override void MoveCursorDown()
@@ -207,32 +207,50 @@ namespace mc
             if (Height > 2 && ((CurrentY - Y) < Height))
             {
                 Console.CursorTop += 1;
+                CurrentCursorPosition += Width - 2;
             }
         }
         public override void MoveCursorLeft()
         {
-            int CurrentX = Console.CursorLeft - X - 1;  
-            if ((CurrentX > X) && 
-                ((CurrentX - X + 1) > 0))
+            int CurrentX = Console.CursorLeft - X - 1;
+            //Not at the beginning of the box, or the string
+            if ((CurrentX > 0) &&
+                (CurrentCursorPosition > 0))
             {
                 Console.CursorLeft -= 1;
                 CurrentCursorPosition -= 1;
+            }
+            //At the beginning of the box, not at the beginning of the string
+            else if ((CurrentX == 0) &&
+                    (CurrentCursorPosition > 0))
+            {
+                ScrollLeft(1);
+                Console.CursorLeft = X + 1;
+                CurrentCursorPosition -= 1;
+            }
+            //At the beginning of the box and the string
+            else if (CurrentX == 0 &&
+                     CurrentCursorPosition == 0)
+            {
+                // Do nothing, we're at the end of the string and the box
             }
         }
         public override void MoveCursorRight()
         {
             int CurrentX = Console.CursorLeft - X - 1;
-
+            //Not at the end of the width, not at the end of the string
             if ((CurrentX < (Width - 2)) &&
                 (CurrentCursorPosition < Text.Length))
             {
                 Console.CursorLeft += 1;
                 CurrentCursorPosition += 1;
             }
+            // At the end of the width, not at the end of the string
             else if ((CurrentX >= (Width - 2)) &&
                     (CurrentCursorPosition < (Text.Length - 1)))
             {
                 ScrollRight(1);
+                Console.CursorLeft -= 1;
                 CurrentCursorPosition += 1;
             }
             else if ((CurrentX >= (Width - 2)) &&
@@ -254,7 +272,12 @@ namespace mc
 
         private void ScrollLeft(int CharsToScroll)
         {
-
+            Console.SetCursorPosition(X + 1, Y + 1);
+            int NewBeginCharLocation = CurrentCursorPosition - 1;
+            if (NewBeginCharLocation >= 0)
+            {
+                Console.Write(Text.Substring(NewBeginCharLocation, Width - 1));
+            }
         }
     }
 }
