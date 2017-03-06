@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace mc
 {
@@ -11,12 +10,12 @@ namespace mc
         const int LeftPanePosX = 0;
         const int LeftPanePosY = 0;
         static int LeftPaneWidth = (Console.WindowWidth / 2) - 1;
-        static int LeftPaneHeight = Console.WindowHeight - 1;
+        static int LeftPaneHeight = Console.WindowHeight - 2;
 
         static int RightPanePosX = (Console.WindowWidth / 2);
         const int RightPanePosY = 0;
         static int RightPaneWidth = (Console.WindowWidth / 2) - 1;
-        static int RightPaneHeight = Console.WindowHeight - 1;
+        static int RightPaneHeight = Console.WindowHeight - 2;
 
         static Pane LeftPane;
         static TextList LeftFileList;

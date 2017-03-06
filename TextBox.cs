@@ -33,12 +33,6 @@ namespace mc
             CurrentCursorPosition = 0;
         }
 
-        protected void OnPropertyChanged(string PropertyName)
-        {
-            int a = 7;
-            int b = a++;
-        }
-
         public void DrawBorder(bool ExtendUp, bool ExtendDown, bool ExtendLeft, bool ExtendRight)
         {
             Console.SetCursorPosition(X, Y);
@@ -173,19 +167,15 @@ namespace mc
 
         public override void MoveCursorToEnd()
         {
-            if (Text.Length > (Width - 1))
-            {
-                ScrollRight(Text.Length - CurrentCursorPosition);
-                CurrentCursorPosition = Text.Length;
-            } else
-            {
-                Console.SetCursorPosition(X + Text.Length, Y + 1);
-            }
+            CurrentCursorPosition = Text.Length - (Text.Length % Width);
+            ScrollRight(Text.Length - Width - 1);
+            Console.SetCursorPosition(X + Width, Y + 1);
+            CurrentCursorPosition = Text.Length;
         }
         public override void MoveCursorToBegin()
         {
+            ScrollLeft(CurrentCursorPosition);
             Console.SetCursorPosition(X + 1, Y + 1);
-            //ScrollLeft(CurrentCursorPosition - X);
             CurrentCursorPosition = 0;
         }
         public override void MoveCursorToPreferred() { MoveCursorToBegin(); }
@@ -229,7 +219,8 @@ namespace mc
             else if (CurrentX == 0 &&
                      CurrentCursorPosition == 0)
             {
-                // Do nothing, we're at the end of the string and the box
+                // Do nothing, we're at the beginning of the string and the box.
+                // I like having this as an explicit condition.
             }
         }
         public override void MoveCursorRight()
@@ -253,7 +244,8 @@ namespace mc
             else if ((CurrentX >= (Width - 2)) &&
                   (CurrentCursorPosition == Text.Length - 1))
             {
-                // Do nothing, we're at the end of the string and the box
+                // Do nothing, we're at the end of the string and the box.
+                // I like having this as an explicit condition.
             }
         }
 
@@ -285,18 +277,15 @@ namespace mc
             if (ReadKey.Key == ConsoleKey.Enter && OnReturnKeyPressed != null)
             {
                 OnReturnKeyPressed(this, new TextBoxReturnKeyEventArgs(Text));
-            } else if(ReadKey.Key == ConsoleKey.End)
-            {
-                CurrentCursorPosition = Text.Length - (Text.Length % Width);
-                ScrollRight(Text.Length - Width - 1);
-                Console.SetCursorPosition(X + Width, Y + 1);
-                CurrentCursorPosition = Text.Length;
-            } else if(ReadKey.Key == ConsoleKey.Home)
-            {
-                ScrollLeft(CurrentCursorPosition);
-                Console.SetCursorPosition(X + 1, Y + 1);
-                CurrentCursorPosition = 0;
             }
+            else if (ReadKey.Key == ConsoleKey.Home)
+            {
+                MoveCursorToBegin();
+            }
+            else if(ReadKey.Key == ConsoleKey.End)
+            {
+                MoveCursorToEnd();
+            } 
         }
         public override void PrintableKeyPressed(ConsoleKeyInfo ReadKey)
         {
