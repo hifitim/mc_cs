@@ -7,7 +7,8 @@ namespace mc
         public int X { get; }
         public int Y { get; }
         public int Width { get; }
-        public int Height { get; }
+        public int Height { get; set; }
+        protected int CurrentCursorPosition { get; set; }
 
         public UIElement(int PosX, int PosY, int ElementWidth, int ElementHeight)
         {

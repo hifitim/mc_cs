@@ -130,7 +130,7 @@ namespace mc
                                                RightPaneWidth,
                                                CurrentLocationHeight);
             LeftCurrentLocation.DrawBorder(true, false, false, false);
-            LeftCurrentLocation.Text = HomeDirectory;
+            LeftCurrentLocation.Text = HomeDirectory; ;// Environment.GetEnvironmentVariable("VS110COMNTOOLS");
 
             RightCurrentLocation.DrawBorder(true, false, false, false);
             RightCurrentLocation.Text = HomeDirectory;

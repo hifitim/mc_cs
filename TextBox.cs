@@ -33,6 +33,7 @@ namespace mc
         {
             DrawBorder();
             Text = string.Empty;
+            CurrentCursorPosition = 0;
         }
 
         protected void OnPropertyChanged(string PropertyName)
@@ -158,6 +159,7 @@ namespace mc
             if (Text.Length < Width)
             {
                 Console.Write(Text);
+                CurrentCursorPosition = Text.Length;
             }
             else
             {
@@ -169,6 +171,7 @@ namespace mc
                     Console.Write(Text.Substring(CurrentPosition, (Width - 1)));
                     CurrentPosition += Width - 1;
                 } while (++CurrentRow < (Height - 1));
+                CurrentCursorPosition = Width;
             }
         }
 
@@ -176,14 +179,20 @@ namespace mc
         {
             if (Text.Length > (Width - 1))
             {
-                Console.SetCursorPosition(X + Width - 1, Y + 1);
+                ScrollRight(Text.Length - CurrentCursorPosition);
+                CurrentCursorPosition = Text.Length;
             } else
             {
                 Console.SetCursorPosition(X + Text.Length, Y + 1);
             }
         }
-        public override void MoveCursorToBegin() { }
-        public override void MoveCursorToPreferred() { MoveCursorToEnd(); }
+        public override void MoveCursorToBegin()
+        {
+            Console.SetCursorPosition(X + 1, Y + 1);
+            ScrollLeft(CurrentCursorPosition - X);
+            CurrentCursorPosition = 0;
+        }
+        public override void MoveCursorToPreferred() { MoveCursorToBegin(); }
         public override void MoveCursorUp()
         {
             int CurrentY = Console.CursorTop;
@@ -202,21 +211,50 @@ namespace mc
         }
         public override void MoveCursorLeft()
         {
-            int CurrentX = Console.CursorLeft;
-            if (CurrentX > 0 && ((CurrentX - X) > 0))
+            int CurrentX = Console.CursorLeft - X - 1;  
+            if ((CurrentX > X) && 
+                ((CurrentX - X + 1) > 0))
             {
                 Console.CursorLeft -= 1;
+                CurrentCursorPosition -= 1;
             }
         }
         public override void MoveCursorRight()
         {
-            int CurrentX = Console.CursorLeft;
-            // + 1 so that you can type at the end of the string
-            if ((CurrentX < (Text.Length + X + 1)) &&
-                (CurrentX < (Width + X)))
+            int CurrentX = Console.CursorLeft - X - 1;
+
+            if ((CurrentX < (Width - 2)) &&
+                (CurrentCursorPosition < Text.Length))
             {
                 Console.CursorLeft += 1;
+                CurrentCursorPosition += 1;
             }
+            else if ((CurrentX >= (Width - 2)) &&
+                    (CurrentCursorPosition < (Text.Length - 1)))
+            {
+                ScrollRight(1);
+                CurrentCursorPosition += 1;
+            }
+            else if ((CurrentX >= (Width - 2)) &&
+                  (CurrentCursorPosition == Text.Length - 1))
+            {
+                // Do nothing, we're at the end of the string and the box
+            }
+        }
+
+        private void ScrollRight(int CharsToScroll)
+        {
+            Console.SetCursorPosition(X + 1, Y + 1);
+            int NewBeginCharLocation = CurrentCursorPosition + CharsToScroll - Width + 2;
+            if ((Width + NewBeginCharLocation - 2) < Text.Length)
+            {
+                Console.Write(Text.Substring(NewBeginCharLocation, Width - 1));
+            }
+        }
+
+        private void ScrollLeft(int CharsToScroll)
+        {
+
         }
     }
 }
