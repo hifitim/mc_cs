@@ -5,7 +5,7 @@ namespace mc
 {
     class TextList : UIElement
     {
-        public List<string> TheList { get; }
+        public List<string> TheList { get; set; }
 
         public TextList(int PosX, int PosY, int Width, int Height) : base(PosX, PosY, Width, Height)
         {
@@ -16,8 +16,20 @@ namespace mc
             TheList = new List<string>(ListOfFiles);
         }
 
+        private void ClearContents()
+        {
+            string ClearString = string.Empty;
+            for (int col = 0; col < Width; col++)
+                ClearString += ' ';
+            for (int row = 0; row < (Height + Y); row++)
+            {
+                Console.SetCursorPosition(X, Y + row + 1);
+                Console.Write(ClearString);
+            }
+        }
         public override void DrawContents()
         {
+            ClearContents();
             Console.SetCursorPosition(X + 1, Y + 1);
             int CurrentRow = 0;
             foreach (string FullFilePath in TheList)
@@ -52,6 +64,7 @@ namespace mc
         public override void MoveCursorDown() { }
         public override void MoveCursorLeft() { }
         public override void MoveCursorRight() { }
-
+        public override void MiscKeyPressed(ConsoleKeyInfo ReadKey) { }
+        public override void PrintableKeyPressed(ConsoleKeyInfo ReadKey) { }
     }
 }

@@ -19,5 +19,7 @@ namespace mc
         public override void MoveCursorDown() { }
         public override void MoveCursorLeft() { }
         public override void MoveCursorRight() { }
+        public override void MiscKeyPressed(ConsoleKeyInfo ReadKey) { }
+        public override void PrintableKeyPressed(ConsoleKeyInfo ReadKey) { }
     }
 }

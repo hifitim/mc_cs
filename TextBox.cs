@@ -3,7 +3,14 @@ using System.ComponentModel;
 
 namespace mc
 {
-    class TextBox : UIElement, INotifyPropertyChanged
+    public delegate void TextBoxReturnKeyEventHandler(object sender, TextBoxReturnKeyEventArgs e);
+
+    public class TextBoxReturnKeyEventArgs : EventArgs
+    {
+        public string Text { get; }
+        public TextBoxReturnKeyEventArgs(string t) { Text = t; }        
+    }
+    class TextBox : UIElement
     {
         class BorderCorner
         {
@@ -15,19 +22,9 @@ namespace mc
             public char UnicodeChar;
         }
 
-        private string text;
-
-        public string Text
-        {
-            get { return text; }
-            set
-            {
-                text = value;
-                OnPropertyChanged("Text");
-            }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
+        public string Text { get; set; }
+        public delegate void TextBoxReturnKeyPressed(object sender, TextBoxReturnKeyEventArgs e);
+        public event TextBoxReturnKeyPressed OnReturnKeyPressed;
 
         public TextBox(int PosX, int PosY, int TextBoxWidth, int TextBoxHeight) : base(PosX, PosY, TextBoxWidth, TextBoxHeight)
         {
@@ -279,5 +276,17 @@ namespace mc
                 Console.Write(Text.Substring(NewBeginCharLocation, Width - 1));
             }
         }
+
+        public override void MiscKeyPressed(ConsoleKeyInfo ReadKey)
+        {
+            if (ReadKey.Key == ConsoleKey.Enter && OnReturnKeyPressed != null)
+            {
+                OnReturnKeyPressed(this, new TextBoxReturnKeyEventArgs(Text));
+            }
+        }
+        public override void PrintableKeyPressed(ConsoleKeyInfo ReadKey)
+        {
+
+        } 
     }
 }

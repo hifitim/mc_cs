@@ -65,6 +65,7 @@ namespace mc
         public abstract void MoveCursorDown();
         public abstract void MoveCursorLeft();
         public abstract void MoveCursorRight();
-
+        public abstract void MiscKeyPressed(ConsoleKeyInfo ReadKey);
+        public abstract void PrintableKeyPressed(ConsoleKeyInfo ReadKey);
     }
 }

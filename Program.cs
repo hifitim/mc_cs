@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace mc
 {
@@ -43,6 +44,8 @@ namespace mc
             LeftPane.DrawContents();
             RightPane.DrawContents();
 
+            LeftCurrentLocation.OnReturnKeyPressed += LeftCurrentLocation_OnReturnKeyPressed;
+            
             Console.SetCursorPosition(UIElements[0].X + 1, UIElements[0].Y + 1);
 
             ConsoleKeyInfo ReadKey;
@@ -76,20 +79,36 @@ namespace mc
                     case ConsoleKey.RightArrow:
                         UIElements[FocusedUIElement].MoveCursorRight();
                         break;
+                    
                     default:
                         // Printable key
                         if(ReadKey.KeyChar >= 0x20 &&
                             ReadKey.KeyChar <= 0x7F)
                         {
-
+                            UIElements[FocusedUIElement].PrintableKeyPressed(ReadKey);
+                        }
+                        else
+                        {
+                            UIElements[FocusedUIElement].MiscKeyPressed(ReadKey);
                         }
                         break;
                 }
 
             } while (ReadKey.Key != ConsoleKey.Escape);
-            Console.WriteLine();
             Console.Clear();
             Console.WriteLine();
+        }
+
+        private static void LeftCurrentLocation_OnReturnKeyPressed(object sender, TextBoxReturnKeyEventArgs e)
+        {
+            List<string> NewFileList = new List<string>(Directory.GetFiles(e.Text));
+            for (int k = 0; k < NewFileList.Count; k++)
+            {
+                NewFileList[k] = NewFileList[k].Substring(NewFileList[k].LastIndexOf("\\") + 1, NewFileList[k].Length - NewFileList[k].LastIndexOf("\\") - 1);
+            }
+
+            LeftFileList.TheList = NewFileList;
+            LeftFileList.DrawContents();
         }
 
         private static void BuildUI()
@@ -108,11 +127,17 @@ namespace mc
                                  RightPaneHeight,
                                  HomeDirectory);
 
+            List<string> NewFileList = new List<string>(Directory.GetFiles(HomeDirectory));
+            for (int k = 0; k < NewFileList.Count; k++)
+            {
+                NewFileList[k] = NewFileList[k].Substring(NewFileList[k].LastIndexOf("\\") + 1, NewFileList[k].Length - NewFileList[k].LastIndexOf("\\") - 1);
+            }
+
             LeftFileList = new TextList(LeftPanePosX + 1,
                                         LeftPanePosY + 1,
                                         LeftPaneWidth - 1,
                                         LeftPaneHeight - 5,
-                                        new List<string>(Directory.GetFiles(HomeDirectory)));
+                                        NewFileList);
 
             LeftCurrentLocation = new TextBox(LeftPanePosX,
                                               LeftPanePosY + LeftPaneHeight - CurrentLocationHeight,
@@ -123,7 +148,7 @@ namespace mc
                                          RightPanePosY + 1,
                                          RightPaneWidth - 1,
                                          RightPaneHeight - 5,
-                                         new List<string>(Directory.GetFiles(HomeDirectory)));
+                                         NewFileList);
 
             RightCurrentLocation = new TextBox(RightPanePosX,
                                                RightPanePosY + RightPaneHeight - CurrentLocationHeight,
