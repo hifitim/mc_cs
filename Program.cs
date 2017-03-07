@@ -44,7 +44,7 @@ namespace mc
             RightPane.DrawContents();
 
             LeftCurrentLocation.OnReturnKeyPressed += LeftCurrentLocation_OnReturnKeyPressed;
-            
+
             Console.SetCursorPosition(UIElements[0].X + 1, UIElements[0].Y + 1);
 
             ConsoleKeyInfo ReadKey;
@@ -78,7 +78,7 @@ namespace mc
                     case ConsoleKey.RightArrow:
                         UIElements[FocusedUIElement].MoveCursorRight();
                         break;
-                    
+
                     default:
                         // Printable key
                         if(ReadKey.KeyChar >= 0x20 &&
@@ -154,7 +154,7 @@ namespace mc
                                                RightPaneWidth,
                                                CurrentLocationHeight);
             LeftCurrentLocation.DrawBorder(true, false, false, false);
-            LeftCurrentLocation.Text = Environment.GetEnvironmentVariable("VS110COMNTOOLS");
+            LeftCurrentLocation.Text = HomeDirectory;
 
             RightCurrentLocation.DrawBorder(true, false, false, false);
             RightCurrentLocation.Text = HomeDirectory;
@@ -163,6 +163,7 @@ namespace mc
             LeftFileList.DrawContents();
 
             RightCurrentLocation.DrawContents();
+            string s = LeftCurrentLocation.Text;
             LeftCurrentLocation.DrawContents();
         }
     }

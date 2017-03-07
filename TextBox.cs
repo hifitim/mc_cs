@@ -8,7 +8,7 @@ namespace mc
     public class TextBoxReturnKeyEventArgs : EventArgs
     {
         public string Text { get; }
-        public TextBoxReturnKeyEventArgs(string t) { Text = t; }        
+        public TextBoxReturnKeyEventArgs(string t) { Text = t; }
     }
     class TextBox : UIElement
     {
@@ -28,8 +28,8 @@ namespace mc
 
         public TextBox(int PosX, int PosY, int TextBoxWidth, int TextBoxHeight) : base(PosX, PosY, TextBoxWidth, TextBoxHeight)
         {
-            DrawBorder();
             Text = string.Empty;
+            DrawBorder();
             CurrentCursorPosition = 0;
         }
 
@@ -147,6 +147,10 @@ namespace mc
         public override void DrawContents()
         {
             Console.SetCursorPosition(X + 1, Y + 1);
+            if (string.IsNullOrEmpty(Text))
+            {
+                Text = string.Empty;
+            }
             if (Text.Length < Width)
             {
                 Console.Write(Text);
@@ -167,10 +171,18 @@ namespace mc
 
         public override void MoveCursorToEnd()
         {
-            CurrentCursorPosition = Text.Length - (Text.Length % Width);
-            ScrollRight(Text.Length - Width - 1);
-            Console.SetCursorPosition(X + Width, Y + 1);
-            CurrentCursorPosition = Text.Length;
+            if (Text.Length > Width)
+            {
+                CurrentCursorPosition = Text.Length - (Text.Length % Width);
+                ScrollRight(Text.Length - Width - 1);
+                Console.SetCursorPosition(X + Width, Y + 1);
+                CurrentCursorPosition = Text.Length;
+            }
+            else if (Text.Length < Width)
+            {
+                CurrentCursorPosition = Text.Length;
+                Console.SetCursorPosition(X + Text.Length + 1, Y + 1);
+            }
         }
         public override void MoveCursorToBegin()
         {
@@ -185,7 +197,7 @@ namespace mc
             if (Height > 2 && ((CurrentY - Y) > 0))
             {
                 Console.CursorTop -= 1;
-               CurrentCursorPosition -= Width - 2;
+                CurrentCursorPosition -= Width - 2;
             }
         }
         public override void MoveCursorDown()
@@ -266,9 +278,15 @@ namespace mc
             Console.SetCursorPosition(X + 1, Y + 1);
             CurrentCursorPosition = X + 1;
             int NewBeginCharLocation = CurrentCursorPosition - 1;
-            if (NewBeginCharLocation >= 0)
+            if (NewBeginCharLocation >= 0 &&
+                Text.Length > Width)
             {
                 Console.Write(Text.Substring(NewBeginCharLocation, Width - 1));
+            }
+            else if (NewBeginCharLocation >= 0 &&
+                    Text.Length < Width)
+            {
+                Console.Write(Text);
             }
         }
 
@@ -282,14 +300,14 @@ namespace mc
             {
                 MoveCursorToBegin();
             }
-            else if(ReadKey.Key == ConsoleKey.End)
+            else if (ReadKey.Key == ConsoleKey.End)
             {
                 MoveCursorToEnd();
-            } 
+            }
         }
         public override void PrintableKeyPressed(ConsoleKeyInfo ReadKey)
         {
 
-        } 
+        }
     }
 }
